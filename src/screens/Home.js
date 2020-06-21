@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, ScrollView, StyleSheet, ImagePropTypes } from 'react-native';
+import { View, ScrollView, StyleSheet, ImagePropTypes, FlatList } from 'react-native';
 import { Header, SearchInput, FabButton } from './../component';
 import { colors } from '../config/colors';
 import CountryObject from './CountryObject';
@@ -8,7 +8,27 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 class Home extends React.Component {
+
+    componentDidMount() {
+        this.props.dispatch(fetchCountries());
+    }
+
+    onSearchClicked = () => {
+        const { searchQuery } = this.props;
+        this.props.dispatch(fetchCountries(searchQuery));
+    }
+
+    onChangeText = (text) => {
+        this.props.dispatch(changeSearchQuery(text));
+    }
+
+    onFabClick = () => {
+        this.props.dispatch(fetchCountries());
+    }
+
     render() {
+        const renderCountryItem = ({ item }) => <CountryObject country={item} />
+
         return (
             <View style={styles.container}>
                 <ScrollView style={styles.container}>
@@ -20,33 +40,30 @@ class Home extends React.Component {
                         style={styles.searchLayout}
                     />
                     <View style={styles.line} />
-                    <CountryObject />
+                    <FlatList
+                        data={this.props.countries}
+                        renderItem={renderCountryItem}
+                        keyExtractor={item=>item.name}
+                    />
                 </ScrollView>
                 <FabButton icon='refresh' onClick={this.onFabClick} style={styles.fab} />
             </View>
         )
     }
-
-    onSearchClicked = () => {
-        this.props.dispatch(fetchCountries(''));
-        
-    }
-
-    onChangeText = (text) => {
-        this.props.dispatch(changeSearchQuery(text));
-    }
-
-    onFabClick = () => {
-        this.props.dispatch(fetchCountries(''));
-    }
 }
 
 Home.protoTypes = {
-    dispatch : PropTypes.func
+    dispatch: PropTypes.func,
+    countries: PropTypes.array,
+    searchQuery: PropTypes.string
 }
 
 const stateToProps = (state) => {
-    return {};
+    const { countries, searchQuery } = state.countries;
+    return {
+        countries,
+        searchQuery
+    };
 };
 
 

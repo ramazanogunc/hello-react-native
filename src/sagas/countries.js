@@ -3,7 +3,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { fetch_countries_api } from '../api/webApi';
 import { fetchCountriesResult } from '../actions/countries';
 
-import { CountriesActionTypes as ActionTypes } from '../types/ActionTypes';
+import { ContryActionTypes as ActionTypes } from '../types/actionTypes';
 
 function* fetchCountriesSaga(action) {
 	try {

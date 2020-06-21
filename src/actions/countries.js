@@ -1,6 +1,6 @@
 import { ContryActionTypes as ActionTypes } from '../types/actionTypes';
 
-export const fetchCountries = (searchQuery) => ({
+export const fetchCountries = (searchQuery ) => ({
     type: ActionTypes.fetch_countries,
     searchQuery
 });
